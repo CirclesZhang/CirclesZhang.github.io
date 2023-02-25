@@ -16,29 +16,25 @@
   <meta name="author" content="zhang">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Docker离线安装 公司内网很多时候无法连通互联网，本文以 Centos 7.6.1810 为参考，记录离线安装Docker流程   获取Docker的安装文件  https:&#x2F;&#x2F;download.docker.com&#x2F;linux&#x2F;static&#x2F;stable&#x2F;x86_64&#x2F;    ​    下载你需要对应版本的文件 ​      将下载的tgz压缩文件上传至你的Linux系统上   执行解压 1">
+    <meta name="description" content="通过dockerfile构建supermap-iobject-java镜像简单介绍     通过dockerfile构建iobject-java环境，简化在Linux开发环境中安装iobject-java的繁琐过程，实现快速部署。此方案仅为实现参考，基础镜像包可以选择更小的镜像方案，还可根据自身需求修改镜像。 1. dockerfile文件  123456789101112131415161718">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Docker离线安装(Centos7.6)">
-<meta property="og:url" content="http://example.com/2022/10/25/Docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85-Centos7-6/index.html">
+<meta property="og:title" content="通过dockerfile构建supermap-iobject-java镜像">
+<meta property="og:url" content="http://example.com/2023/02/25/%E9%80%9A%E8%BF%87dockerfile%E6%9E%84%E5%BB%BAsupermap-iobject-java%E9%95%9C%E5%83%8F/index.html">
 <meta property="og:site_name" content="小张不会慌张">
-<meta property="og:description" content="Docker离线安装 公司内网很多时候无法连通互联网，本文以 Centos 7.6.1810 为参考，记录离线安装Docker流程   获取Docker的安装文件  https:&#x2F;&#x2F;download.docker.com&#x2F;linux&#x2F;static&#x2F;stable&#x2F;x86_64&#x2F;    ​    下载你需要对应版本的文件 ​      将下载的tgz压缩文件上传至你的Linux系统上   执行解压 1">
+<meta property="og:description" content="通过dockerfile构建supermap-iobject-java镜像简单介绍     通过dockerfile构建iobject-java环境，简化在Linux开发环境中安装iobject-java的繁琐过程，实现快速部署。此方案仅为实现参考，基础镜像包可以选择更小的镜像方案，还可根据自身需求修改镜像。 1. dockerfile文件  123456789101112131415161718">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/VmOZRIoGSBdnUhW.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/KbCrSH6fOVI2jsA.png">
-<meta property="og:image" content="https://s2.loli.net/2022/10/25/TSUnHhjiZb6fXoe.png">
-<meta property="article:published_time" content="2022-10-25T02:51:02.000Z">
-<meta property="article:modified_time" content="2022-10-25T02:56:18.800Z">
+<meta property="article:published_time" content="2023-02-25T05:54:30.000Z">
+<meta property="article:modified_time" content="2023-02-25T05:59:14.606Z">
 <meta property="article:author" content="zhang">
-<meta property="article:tag" content="离线安装">
 <meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Dockerfile">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2022/10/25/VmOZRIoGSBdnUhW.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Docker离线安装(Centos7.6) - 小张不会慌张</title>
+  <title>通过dockerfile构建supermap-iobject-java镜像 - 小张不会慌张</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -203,7 +199,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Docker离线安装(Centos7.6)"></span>
+            <span id="subtitle" data-typed-text="通过dockerfile构建supermap-iobject-java镜像"></span>
           
         </div>
 
@@ -214,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-10-25 10:51" pubdate>
-          2022年10月25日 上午
+        <time datetime="2023-02-25 13:54" pubdate>
+          2023年2月25日 下午
         </time>
       </span>
     
@@ -226,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.7k 字
+          2.2k 字
         
       </span>
     
@@ -237,7 +233,7 @@
         
         
         
-          15 分钟
+          19 分钟
         
       </span>
     
@@ -275,46 +271,24 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Docker离线安装(Centos7.6)</h1>
+            <h1 style="display: none">通过dockerfile构建supermap-iobject-java镜像</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="Docker离线安装"><a href="#Docker离线安装" class="headerlink" title="Docker离线安装"></a>Docker离线安装</h2><blockquote>
-<p>公司内网很多时候无法连通互联网，本文以 <strong>Centos 7.6.1810</strong> 为参考，记录离线安装Docker流程</p>
-</blockquote>
-<ol>
-<li><p>获取Docker的安装文件</p>
+                <h2 id="通过dockerfile构建supermap-iobject-java镜像"><a href="#通过dockerfile构建supermap-iobject-java镜像" class="headerlink" title="通过dockerfile构建supermap-iobject-java镜像"></a>通过dockerfile构建supermap-iobject-java镜像</h2><h3 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h3><p>     通过dockerfile构建iobject-java环境，简化在Linux开发环境中安装iobject-java的繁琐过程，实现快速部署。此方案仅为实现参考，基础镜像包可以选择更小的镜像方案，还可根据自身需求修改镜像。</p>
+<h4 id="1-dockerfile文件"><a href="#1-dockerfile文件" class="headerlink" title="1. dockerfile文件"></a>1. dockerfile文件</h4>  <figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-comment">#基础镜像</span><br><span class="hljs-keyword">FROM</span> java:<span class="hljs-number">8</span><br><span class="hljs-comment">#维护者信息</span><br><span class="hljs-keyword">MAINTAINER</span> xiaozhang <span class="hljs-string">&quot;xiaozhang&quot;</span><br><span class="hljs-comment"># 创建文件夹</span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> <span class="hljs-built_in">set</span> -x; <span class="hljs-built_in">mkdir</span> -p /home/newjar \</span><br><span class="language-bash">            &amp;&amp; <span class="hljs-built_in">mkdir</span> -p /opt/SuperMap \</span><br><span class="language-bash">            &amp;&amp; <span class="hljs-built_in">mkdir</span> -p /opt/SuperMap/Lincense</span><br><span class="hljs-comment"># 复制文件进入</span><br><span class="hljs-keyword">ADD</span><span class="language-bash"> supermap.tar /home/</span><br><br><span class="hljs-comment">#配置环境</span><br><span class="hljs-keyword">ENV</span> JAVA_HOME /home/supermap/jre1.<span class="hljs-number">8</span><br><span class="hljs-keyword">ENV</span> SUPERMAP_ROOT /home/supermap/Support<br><span class="hljs-keyword">ENV</span> LD_LIBRARY_PATH /home/supermap/Bin:$LD_LIBRARY_PATH<br><span class="hljs-keyword">ENV</span> PATH $JAVA_HOME/bin:$PATH<br><br><span class="hljs-comment"># 添加jar包</span><br><span class="hljs-keyword">ADD</span><span class="language-bash"> ./target/iobjectsjava-1.0.jar /home/newjar/app.jar</span><br><span class="hljs-comment"># 添加启动文件</span><br><span class="hljs-keyword">ADD</span><span class="language-bash"> service.sh /home/service.sh</span><br><span class="hljs-comment"># 启动服务</span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> /home/service.sh</span><br></code></pre></td></tr></table></figure>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://download.docker.com/linux/static/stable/x86_64/">https://download.docker.com/linux/static/stable/x86_64/</a></p>
+<p>介绍： 由Java8为基础镜像搭建镜像包，复制进入的<strong>supermap.tar</strong>已<strong>supermap-iobjectsjava-11.0.1-21420-98023-linux64-all.tar.gz</strong>为基础，在Bin目录下增加缺失的<u>libgomp.so.1 </u>文件，并已经提前解压 /<strong>home/supermap/Support/aksusbd-8.31.1.tar</strong>文件,删除无关的demo文件。</p>
 </blockquote>
-</li>
-</ol>
-<p>​    下载你需要对应版本的文件</p>
-<p>​    <img src="https://s2.loli.net/2022/10/25/VmOZRIoGSBdnUhW.png" srcset="/img/loading.gif" lazyload alt="docker版本.png"></p>
-<ol start="2">
-<li><p>将下载的tgz压缩文件上传至你的Linux系统上</p>
-<p><img src="https://s2.loli.net/2022/10/25/KbCrSH6fOVI2jsA.png" srcset="/img/loading.gif" lazyload alt="上传docker.png"></p>
-</li>
-<li><p>执行解压</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tar -zxvf docker-20.10.20.tgz <br></code></pre></td></tr></table></figure></li>
-<li><p>已解压文件复制到*/usr/bin/* 下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cp docker/* /usr/bin/<br></code></pre></td></tr></table></figure></li>
-<li><p>进入*/etc/systemd/system*,并创建<strong>docker.service</strong></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">cd /etc/systemd/system/<br>touch docker.service<br></code></pre></td></tr></table></figure></li>
-<li><p>编辑<strong>docker.service</strong>文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">vi docker.service<br></code></pre></td></tr></table></figure>
-
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">复制以下内容 配置说明参考docker官网 esc :wq保存</span><br>[Unit]<br>Description=Docker Application Container Engine<br>Documentation=https://docs.docker.com<br>After=network-online.target firewalld.service<br>Wants=network-online.target<br><br>[Service]<br>Type=notify<br><span class="hljs-meta prompt_"># </span><span class="language-bash">the default is not to use systemd <span class="hljs-keyword">for</span> cgroups because the delegate issues still</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">exists and systemd currently does not support the cgroup feature <span class="hljs-built_in">set</span> required</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-keyword">for</span> containers run by docker</span><br>ExecStart=/usr/bin/dockerd --selinux-enabled=false --insecure-registry=127.0.0.1<br>ExecReload=/bin/kill -s HUP $MAINPID<br><span class="hljs-meta prompt_"># </span><span class="language-bash">Having non-zero Limit*s causes performance problems due to accounting overhead</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-keyword">in</span> the kernel. We recommend using cgroups to <span class="hljs-keyword">do</span> container-local accounting.</span><br>LimitNOFILE=infinity<br>LimitNPROC=infinity<br>LimitCORE=infinity<br><span class="hljs-meta prompt_"># </span><span class="language-bash">Uncomment TasksMax <span class="hljs-keyword">if</span> your systemd version supports it.</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">Only systemd 226 and above support this version.</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">TasksMax=infinity</span><br>TimeoutStartSec=0<br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">set</span> delegate <span class="hljs-built_in">yes</span> so that systemd does not reset the cgroups of docker containers</span><br>Delegate=yes<br><span class="hljs-meta prompt_"># </span><span class="language-bash"><span class="hljs-built_in">kill</span> only the docker process, not all processes <span class="hljs-keyword">in</span> the cgroup</span><br>KillMode=process<br><span class="hljs-meta prompt_"># </span><span class="language-bash">restart the docker process <span class="hljs-keyword">if</span> it exits prematurely</span><br>Restart=on-failure<br>StartLimitBurst=3<br>StartLimitInterval=60s<br><br>[Install]<br>WantedBy=multi-user.target<br></code></pre></td></tr></table></figure></li>
-<li><p>添加权限</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">chmod 777 /etc/systemd/system/docker.service<br></code></pre></td></tr></table></figure></li>
-<li><p>启动和重载命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">重新加载配置</span><br>systemctl daemon-reload<br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动</span><br>systemctl start docker<br><span class="hljs-meta prompt_"># </span><span class="language-bash">设置开机启动</span><br>systemctl enable docker.service<br><span class="hljs-meta prompt_"># </span><span class="language-bash">查看docker服务状态</span><br>systemctl status docker<br></code></pre></td></tr></table></figure>
-
-<p><img src="https://s2.loli.net/2022/10/25/TSUnHhjiZb6fXoe.png" srcset="/img/loading.gif" lazyload alt="启动成功.png"></p>
-</li>
-</ol>
-<p>​        如图所示docker <strong>启动成功</strong></p>
+<h4 id="2-service-sh-启动文件介绍"><a href="#2-service-sh-启动文件介绍" class="headerlink" title="2. service.sh 启动文件介绍"></a>2. service.sh 启动文件介绍</h4>  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动iobject</span><br>cd /home/supermap/Support/aksusbd-8.31.1<br>./dinst<br>cd /home<br><span class="hljs-meta prompt_"># </span><span class="language-bash">API服务器脚本部署</span><br>APP_NAME=app.jar<br><span class="hljs-meta prompt_">#</span><span class="language-bash">根据端口号查询对应的pid</span><br>pid=$(ps -ef|grep $APP_NAME|grep -v &#x27;grep&#x27;|grep -v &#x27;tail&#x27;|awk &#x27;&#123;print $2&#125;&#x27;)<br>if [  -n  &quot;$pid&quot;  ];  then<br>    echo &quot;关闭进程中...&quot;<br>    kill  -9  $pid;<br>else<br>    echo &quot;进程不存在...&quot;<br>fi<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">备份日志文件</span><br>bakfile=&quot;_api_`date +%Y%m%d%H%M`.out&quot;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">如果备份日志文件夹不存在，则创建文件夹</span><br>if [ ! -d &quot;log-bak&quot; ]; then<br>    mkdir log-bak<br>fi<br>if [ ! -f &quot;_api_$&#123;APP_NAME&#125;.out&quot; ]; then<br>    echo &quot;log文件不存在...&quot;<br>else<br>    mv _api_$&#123;APP_NAME&#125;.out log-bak/$bakfile<br>fi<br><span class="hljs-meta prompt_"># </span><span class="language-bash">备份jar文件</span><br>bakjarfile=&quot;$&#123;APP_NAME&#125;`date +%Y%m%d%H%M`.jar&quot;<br>if [ ! -d &quot;jar-bak&quot; ]; then<br>    mkdir jar-bak<br>fi<br>cp $&#123;APP_NAME&#125; jar-bak/$bakjarfile<br>cp /home/newjar/$&#123;APP_NAME&#125; .<br><span class="hljs-meta prompt_"># </span><span class="language-bash">第四步：启动jar文件</span><br>nohup java -jar $&#123;APP_NAME&#125; --spring.profiles.active=prod &gt;&gt;_api_$&#123;APP_NAME&#125;.out &amp;<br>echo &quot;服务器启动完成&quot;<br>tail -f _api_$&#123;APP_NAME&#125;.out<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>介绍： 启动命令前，需先启动iobject的许可，不然无法调用有关的iobject类。剩下的是一些简单的备份启动命令。</p>
+</blockquote>
+<h4 id="3-docker命令"><a href="#3-docker命令" class="headerlink" title="3. docker命令"></a>3. docker命令</h4>  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">构建镜像</span><br>docker build -t supermap/iobject-java:8 .<br><span class="hljs-meta prompt_"># </span><span class="language-bash">启动镜像</span><br>docker run --name iobject -p 18080:18080 \<br>            -v /home/newjar:/home/newjar \<br>            -v /opt/SuperMap/License:/opt/SuperMap/License \<br>            -d supermap/iobject-java:8<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>介绍： 将newjar文件夹挂载出来，避免小更新重新构建镜像。/opt/SuperMap/License为存放许可的地方，如果有可以加入。</p>
+</blockquote>
 
                 
               </div>
@@ -333,7 +307,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85/" class="category-chain-item">软件安装</a>
+  <a href="/categories/supermap/" class="category-chain-item">supermap</a>
   
   
 
@@ -348,9 +322,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/">#离线安装</a>
-      
         <a href="/tags/Docker/">#Docker</a>
+      
+        <a href="/tags/Dockerfile/">#Dockerfile</a>
       
     </div>
   
@@ -364,18 +338,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/02/25/%E9%80%9A%E8%BF%87dockerfile%E6%9E%84%E5%BB%BAsupermap-iobject-java%E9%95%9C%E5%83%8F/" title="通过dockerfile构建supermap-iobject-java镜像">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">通过dockerfile构建supermap-iobject-java镜像</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/10/21/%E8%AF%AD%E6%B3%95%E7%A4%BA%E4%BE%8B/" title="Markdown 语法示例">
-                        <span class="hidden-mobile">Markdown 语法示例</span>
+                      <a href="/2022/10/25/Docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85-Centos7-6/" title="Docker离线安装(Centos7.6)">
+                        <span class="hidden-mobile">Docker离线安装(Centos7.6)</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

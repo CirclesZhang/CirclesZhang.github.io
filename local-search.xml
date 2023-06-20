@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>windows使用wrk实现压力测试</title>
+    <link href="/2023/06/20/windows%E4%BD%BF%E7%94%A8wrk%E5%AE%9E%E7%8E%B0%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/"/>
+    <url>/2023/06/20/windows%E4%BD%BF%E7%94%A8wrk%E5%AE%9E%E7%8E%B0%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/</url>
+    
+    <content type="html"><![CDATA[<h2 id="windows使用wrk实现QPS测试"><a href="#windows使用wrk实现QPS测试" class="headerlink" title="windows使用wrk实现QPS测试"></a>windows使用wrk实现QPS测试</h2><h3 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h3><p>​        公司验收之前需要测试方案中对相应接口实现压力测试并确定<code>QPS</code>，使用wrk实现简单的测试并通过windows实现应用。至于为什么使用<code>wrk</code>，因为他简单上手快，当然对比传统的<code>JMeter</code> 等来说功能没有这么多。</p><h3 id="安装wrk"><a href="#安装wrk" class="headerlink" title="安装wrk"></a>安装wrk</h3><p>​        <code>wrk</code>在windows安装有两种方案，两种都差不多，第一种是使用docker进行部署，第二种是使用windows的WSL2安装自带的Linux系统，我这边已经使用WSL2安装好了<code>Arch Linux</code>，可以参考其他文章来安装Linux，这里简单介绍下两种环境下的安装方案。</p><h4 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h4><ol><li>从 <code>GitHub</code>上下拉代码</li></ol><ol start="2"><li><p>解压缩后在 <em>wrk-master</em>中创建 <strong>Dockerfile</strong></p><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> gcc<br><br><span class="hljs-keyword">COPY</span><span class="language-bash"> . /usr/src/wrk/</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /usr/src/wrk/</span><br><br><span class="hljs-keyword">RUN</span><span class="language-bash"> \</span><br><span class="language-bash">  make</span><br><br><span class="hljs-keyword">ENTRYPOINT</span><span class="language-bash"> [ <span class="hljs-string">&quot;./wrk&quot;</span> ]</span><br></code></pre></td></tr></table></figure></li><li><p>根据 <strong>Dockerfile</strong> 生成镜像测试</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">docker 构建镜像</span><br>docker build -f .\DockerFile . -t wrk:1.1.1i<br><span class="hljs-meta prompt_"># </span><span class="language-bash">docker 启动并拿baidu测试下</span><br>docker run --rm -it wrk:1.1.1i -t1 -c1 -d30s https://www.baidu.com<br></code></pre></td></tr></table></figure><p><img src="https://s2.loli.net/2023/06/20/XEKJutYNZWrq38G.png" alt="image-20230620101109863.png"></p></li></ol><h4 id="使用Arch-Linux-安装"><a href="#使用Arch-Linux-安装" class="headerlink" title="使用Arch Linux 安装"></a>使用Arch Linux 安装</h4><ol><li><p>与普通的Linux 安装同理，这里演示安装最新版的wrk。</p><p>当然你也可以直接用包管理工具安装</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">pacman -S wrk<br></code></pre></td></tr></table></figure></li><li><p>安装最新的wrk</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">git clone https://github.com/wg/wrk.git wrk<br>cd wrk<br>make<br><span class="hljs-meta prompt_"># </span><span class="language-bash">将可执行文件移动到 /usr/local/bin 位置</span><br>sudo cp wrk /usr/local/bin<br></code></pre></td></tr></table></figure></li><li><p>执行测试</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">wrk -t1 -c1 -d30s https://www.baidu.com<br></code></pre></td></tr></table></figure><p><img src="https://s2.loli.net/2023/06/20/7oJ5BpPQcObvXde.png" alt="image-20230620103416205.png"></p></li></ol><h3 id="看懂wrk"><a href="#看懂wrk" class="headerlink" title="看懂wrk"></a>看懂wrk</h3><p>​        上述安装测试中已经简单展示如何使用wrk对GET接口进行测试，下面将简单介绍下wrk的命令参数</p><h4 id="命令行参数"><a href="#命令行参数" class="headerlink" title="命令行参数"></a>命令行参数</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs shell">-c, --connections: total number of HTTP connections to keep open with<br>                   each thread handling N = connections/threads<br>  (每个线程处理N个连接总数 = 连接数 / 线程数)<br>-d, --duration:    duration of the test, e.g. 2s, 2m, 2h<br>  (测试的持续时间，例如2秒、2分钟、2小时)<br>-t, --threads:     total number of threads to use<br>  (要使用的线程总数)<br>-s, --script:      LuaJIT script, see SCRIPTING<br>  (Lua脚本信息，详情查看SCRIPTING)<br>-H, --header:      HTTP header to add to request, e.g. &quot;User-Agent: wrk&quot;<br>  (HTTP header信息添加)<br>    --latency:     print detailed latency statistics<br>  (打印详细的延迟统计信息)<br>    --timeout:     record a timeout if a response is not received within<br>                   this amount of time.<br>                   (如果在规定的时间内没有收到响应，则记录超时)<br></code></pre></td></tr></table></figure><h4 id="压测报告"><a href="#压测报告" class="headerlink" title="压测报告"></a>压测报告</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs shell">Running 30s test @ http://127.0.0.1:8080/index.html<br>  12 threads and 400 connections<br>  Thread Stats   Avg      Stdev     Max   +/- Stdev<br>    Latency   635.91us    0.89ms  12.92ms   93.69%<br>    Req/Sec    56.20k     8.07k   62.00k    86.54%<br>  22464657 requests in 30.00s, 17.76GB read<br>Requests/sec: 748868.53<br>Transfer/sec:    606.33MB<br></code></pre></td></tr></table></figure><p><code>wrk</code>的报告包含了HTTP压力测试的结果，其中包括以下几个部分：</p><ol><li>Latency（延迟）：包括平均延迟、最小延迟、最大延迟和延迟标准差等统计信息，以及每个请求的延迟时间分布图表。</li><li>Requests/sec（每秒请求数）：每秒钟处理的请求数量。</li><li>Transfer/sec（每秒传输量）：每秒钟传输的数据量。</li><li>Socket errors（套接字错误）：测试期间发生的套接字错误数量。</li><li>Non-2xx responses（非2xx响应）：测试期间收到的非2xx响应的数量。</li></ol><blockquote><p>其中Requests/sec就是我们所需要的<code>QPS</code></p></blockquote><h3 id="使用wrk"><a href="#使用wrk" class="headerlink" title="使用wrk"></a>使用wrk</h3><h4 id="简单的POST使用"><a href="#简单的POST使用" class="headerlink" title="简单的POST使用"></a>简单的POST使用</h4><p>​        在单纯命令行中，我们单单只能测试普通的GET请求，<code>wrk</code>还提供<code>Lua</code>脚本来支持POST等复杂的请求逻辑，下面将简单展示如何使用<code>Lua</code>脚本扩展<code>wrk</code></p><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs lua"><span class="hljs-comment">-- wrk lua post脚本</span><br><span class="hljs-comment">-- 设置请求类型</span><br>wrk.method = <span class="hljs-string">&quot;POST&quot;</span><br><span class="hljs-comment">-- 设置请求body</span><br>wrk.body = <span class="hljs-string">&#x27;&#123;&quot;inputCoordsys&quot;:&quot;BD-09&quot;,&quot;outputCoordsys&quot;:&quot;GCJ-02&quot;,&quot;locations&quot;:[&quot;126.481499,39.994475&quot;]&#125;&#x27;</span><br><span class="hljs-comment">-- 设置请求header</span><br>wrk.headers[<span class="hljs-string">&quot;Content-Type&quot;</span>] = <span class="hljs-string">&quot;application/json&quot;</span><br></code></pre></td></tr></table></figure><p>创建<code>Lua</code>脚本，并通过<code>-s demo.lua</code>参数给<code>wrk</code>添加脚本命令，这样<code>wrk</code>将会以当前脚本执行相应的测试。</p><p>​        当然<code>Lua</code>脚本不止实现当前功能，如果我们的接口需要校验，根据<a href="https://github.com/wg/wrk/blob/master/SCRIPTING">SCRIPTING</a>文件中的介绍，结合官方的<a href="https://github.com/wg/wrk/blob/master/scripts/auth.lua">auth.lua</a>来实现我们自己的登录请求。更多花样可以自行探索 <strong>SCRIPTING</strong> 文件。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>软件安装</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>wrk</tag>
+      
+      <tag>qps</tag>
+      
+      <tag>测试</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>通过dockerfile构建supermap-iobject-java镜像</title>
     <link href="/2023/02/25/%E9%80%9A%E8%BF%87dockerfile%E6%9E%84%E5%BB%BAsupermap-iobject-java%E9%95%9C%E5%83%8F/"/>
     <url>/2023/02/25/%E9%80%9A%E8%BF%87dockerfile%E6%9E%84%E5%BB%BAsupermap-iobject-java%E9%95%9C%E5%83%8F/</url>
@@ -20,9 +49,9 @@
     
     <tags>
       
-      <tag>Dockerfile</tag>
-      
       <tag>Docker</tag>
+      
+      <tag>Dockerfile</tag>
       
     </tags>
     
@@ -47,9 +76,9 @@
     
     <tags>
       
-      <tag>Docker</tag>
-      
       <tag>离线安装</tag>
+      
+      <tag>Docker</tag>
       
     </tags>
     

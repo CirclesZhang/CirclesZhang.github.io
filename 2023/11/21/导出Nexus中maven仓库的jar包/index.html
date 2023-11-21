@@ -16,24 +16,27 @@
   <meta name="author" content="zhang">
   <meta name="keywords" content="">
   
-    <meta name="description" content="公司需要在空闲服务器实现稳定的CPU占用，实现一个无限循环的脚本，用于占用特定的CPU占用率。">
+    <meta name="description" content="公司maven私有仓库迁移，导出jar包保存。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用shell脚本占用服务器CPU">
-<meta property="og:url" content="http://example.com/2023/10/12/%E4%BD%BF%E7%94%A8shell%E8%84%9A%E6%9C%AC%E5%8D%A0%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8CPU/index.html">
+<meta property="og:title" content="导出Nexus中maven仓库的jar包">
+<meta property="og:url" content="http://example.com/2023/11/21/%E5%AF%BC%E5%87%BANexus%E4%B8%ADmaven%E4%BB%93%E5%BA%93%E7%9A%84jar%E5%8C%85/index.html">
 <meta property="og:site_name" content="小张不会慌张">
-<meta property="og:description" content="公司需要在空闲服务器实现稳定的CPU占用，实现一个无限循环的脚本，用于占用特定的CPU占用率。">
+<meta property="og:description" content="公司maven私有仓库迁移，导出jar包保存。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-10-12T13:22:32.000Z">
-<meta property="article:modified_time" content="2023-10-20T02:35:30.962Z">
+<meta property="og:image" content="https://s2.loli.net/2023/11/21/xDLP5cHVTeW6ual.png">
+<meta property="article:published_time" content="2023-11-21T07:16:20.000Z">
+<meta property="article:modified_time" content="2023-11-21T07:54:34.817Z">
 <meta property="article:author" content="zhang">
-<meta property="article:tag" content="脚本">
+<meta property="article:tag" content="maven">
+<meta property="article:tag" content="nexus">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://s2.loli.net/2023/11/21/xDLP5cHVTeW6ual.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>使用shell脚本占用服务器CPU - 小张不会慌张</title>
+  <title>导出Nexus中maven仓库的jar包 - 小张不会慌张</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -198,7 +201,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="使用shell脚本占用服务器CPU"></span>
+            <span id="subtitle" data-typed-text="导出Nexus中maven仓库的jar包"></span>
           
         </div>
 
@@ -209,8 +212,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-10-12 21:22" pubdate>
-          2023年10月12日 晚上
+        <time datetime="2023-11-21 15:16" pubdate>
+          2023年11月21日 下午
         </time>
       </span>
     
@@ -221,7 +224,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          1.8k 字
         
       </span>
     
@@ -232,7 +235,7 @@
         
         
         
-          11 分钟
+          15 分钟
         
       </span>
     
@@ -270,24 +273,29 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">使用shell脚本占用服务器CPU</h1>
+            <h1 style="display: none">导出Nexus中maven仓库的jar包</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="使用Shell脚本占用服务器CPU"><a href="#使用Shell脚本占用服务器CPU" class="headerlink" title="使用Shell脚本占用服务器CPU"></a>使用Shell脚本占用服务器CPU</h2><h3 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h3><blockquote>
-<p>公司需要在空闲服务器实现稳定的CPU占用，实现一个无限循环的脚本，用于占用特定的CPU占用率。</p>
+                <h2 id="导出Nexus中maven仓库的jar包"><a href="#导出Nexus中maven仓库的jar包" class="headerlink" title="导出Nexus中maven仓库的jar包"></a>导出Nexus中maven仓库的jar包</h2><h3 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h3><blockquote>
+<p>​        浏览了网上的资料，没有完整的使用shell脚本下载maven私库jar包的案例，在这里记录下。缘由是公司maven私库迁移，想把jar包都备份一下，使用shell脚本调用nexus api 完成数据读取，并通过jq解析返回的json内容，使用curl下载对应的jar包并保存。</p>
 </blockquote>
-<h3 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h3><p>​        <em>话不多说直接放脚本</em></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">! /bin/bash</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">循环脚本</span><br>endless_loop()&#123;<br>  echo -ne &quot;i=0;<br>  while true<br>  do<br>  i=i+100;<br>  i=100<br>  done&quot; | /bin/bash &amp;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">输入使用的cpu核数</span><br>if [ $# != 1 ] ; then<br>  echo &quot;USAGE: $0 &lt;CPUs&gt;&quot;<br>  exit 1;<br>fi<br>for i in `seq $1`<br>do<br>  endless_loop<br><span class="hljs-meta prompt_">  pid_array[$</span><span class="language-bash">i]=$! ;</span><br>done<br><span class="hljs-meta prompt_">#</span><span class="language-bash">显示进程对应的pid</span><br>for i in &quot;$&#123;pid_array[@]&#125;&quot;; do<br>  echo &#x27;stopUsage: kill &#x27; $i &#x27;;&#x27;;<br>done<br></code></pre></td></tr></table></figure>
+<h3 id="直接上手"><a href="#直接上手" class="headerlink" title="直接上手"></a>直接上手</h3><ol>
+<li><strong>安装jq</strong></li>
+</ol>
+<p>​        jq 就像 JSON 数据的 sed，你可以用它来切片、过滤、映射和转换结构化数据，就像 sed、awk、grep 和其他朋友让你轻松处理文本一样。首先打开jq的网址<a target="_blank" rel="noopener" href="https://jqlang.github.io/jq/%EF%BC%8C%E4%B8%8B%E8%BD%BD%E5%AF%B9%E5%BA%94%E7%9A%84%E7%89%88%E6%9C%AC%E3%80%82%E6%88%91%E4%B8%8B%E8%BD%BD%E7%9A%84%E6%98%AF%E7%AC%AC%E4%B8%80%E4%B8%AAAMD64%E7%9A%84%E3%80%82">https://jqlang.github.io/jq/，下载对应的版本。我下载的是第一个AMD64的。</a></p>
+<p>​        <img src="https://s2.loli.net/2023/11/21/xDLP5cHVTeW6ual.png" srcset="/img/loading.gif" lazyload alt="1700552233096.png"></p>
+<p>​        下载完成后，上传至服务器，或者能访问服务器的机子，并将jq设置进环境变量中。修改<code>vim /etc/profile</code>文件，在文件末尾添加，<code>PATH=$PATH:&#123;你上传jq文件的地址&#125; </code> ，刷新<code>source /etc/profile</code> 完成安装。可以执行下<code>jq</code> 查看输出确认是否安装成功。</p>
+<ol start="2">
+<li><strong>编写shell脚本</strong></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br><br>NEXUS_URL=&quot;你的nexus路径&quot;<br>REPO_USERNAME=&quot;你的用户名&quot;<br>REPO_PASSWORD=&quot;你的密码&quot;<br>OUTPUT_DIR_ROOT=&quot;downloaded_jars&quot;<br>SEARCH_RESULT_FILE=&quot;search_result.json&quot;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">创建输出目录</span><br>mkdir -p &quot;$OUTPUT_DIR_ROOT&quot;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">获取仓库中所有符合条件的组件</span><br>SEARCH_URL=&quot;$&#123;NEXUS_URL&#125;service/rest/v1/search/assets&quot;<br>curl -s -u &quot;$&#123;REPO_USERNAME&#125;:$&#123;REPO_PASSWORD&#125;&quot; &quot;$SEARCH_URL&quot; &gt; &quot;$SEARCH_RESULT_FILE&quot;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">提取所有JAR包下载链接并下载</span><br>jq -c &#x27;.items[] | &#123;path: .path, downloadUrl: .downloadUrl&#125; &#x27; &quot;$SEARCH_RESULT_FILE&quot; | while IFS= read -r line; do<br>    if [ -n &quot;$line&quot; ]; then<br>        PATH_URL=$(echo &quot;$line&quot; | jq -r &#x27;.path&#x27;)<br>        DOWNLOAD_URL=$(echo &quot;$line&quot; | jq -r &#x27;.downloadUrl&#x27;)<br><br>        # echo &quot;PATH:$PATH_URL&quot;<br>        # echo &quot;DOWNLOAD_URL:$DOWNLOAD_URL&quot;<br>        OUTPUT_DIR=&quot;$OUTPUT_DIR_ROOT/$(dirname &quot;$PATH_URL&quot;)&quot;<br>        mkdir -p &quot;$OUTPUT_DIR&quot;<br><br>        FILENAME=$(basename &quot;$DOWNLOAD_URL&quot;)<br>        OUTPUT_PATH=&quot;$OUTPUT_DIR/$FILENAME&quot;<br>        echo &quot;Downloading $FILENAME...&quot;<br>        curl -u &quot;$&#123;REPO_USERNAME&#125;:$&#123;REPO_PASSWORD&#125;&quot; -o &quot;$OUTPUT_PATH&quot; &quot;$DOWNLOAD_URL&quot;<br>    fi<br>done<br><br></code></pre></td></tr></table></figure>
 
-<p>​        执行的方式 <code>sh cpu_load.sh 2</code>  2为占用的核心数，根据自己的需求调整。</p>
-<h3 id="cpu-limit介绍"><a href="#cpu-limit介绍" class="headerlink" title="cpu_limit介绍"></a>cpu_limit介绍</h3><p>​        <em>cpu_limit</em> 是一款用于控制CPU使用率的工具，参考地址 <a target="_blank" rel="noopener" href="https://cpulimit.sourceforge.net/">地址</a> </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">离线下载CPU_limit</span><br>wget &#x27;http://downloads.sourceforge.net/cpulimit/cpulimit-1.1.tar.gz&#x27; --no-check-certificate<br><span class="hljs-meta prompt_"># </span><span class="language-bash">解压tar 安装</span><br>tar -zxf cpulimit-1.1.tar.gz<br>cd cpulimit-1.1<br>make<br>cp cpulimit /usr/bin/<br><span class="hljs-meta prompt_"># </span><span class="language-bash">使用方式</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">限制pid占用百分比</span><br>cpulimit -p 1313 -l 40<br></code></pre></td></tr></table></figure>
-
-<h3 id="结合两个功能"><a href="#结合两个功能" class="headerlink" title="结合两个功能"></a>结合两个功能</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">! /bin/bash</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">写满核心数</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">限制进程号的程序使用40% cpu利用率</span><br>utilization=&quot;40&quot;<br><br>endless_loop()<br>&#123;<br>    echo -ne &quot;i=0;<br>    while true<br>    do<br>    i=i+100;<br>    i=100<br>    done&quot; | /bin/bash &amp;<br>&#125;<br><br>if [ $# != 1 ] ; then<br>  echo &quot;USAGE: $0 &lt;CPUs&gt;&quot;<br>  exit 1;<br>fi<br>for i in `seq $1`<br>do<br>  endless_loop<br><span class="hljs-meta prompt_">  pid_array[$</span><span class="language-bash">i]=$! ;</span><br>done<br><br>for i in &quot;$&#123;pid_array[@]&#125;&quot;; do<br>    echo &#x27;stopUsage: kill &#x27; $i &#x27;;&#x27;<br>    nohup cpulimit -p &quot;$i&quot; -l &quot;$utilization&quot; &amp;<br>done<br></code></pre></td></tr></table></figure>
-
-
+<ol start="3">
+<li><strong>完成</strong></li>
+</ol>
+<p>​        修改对应的配置项，执行shell脚本，你的jar包就会和本地的maven仓库一样，安安静静躺在<code>OUTPUT_DIR_ROOT</code>对应的目录下，完结撒花。</p>
 
                 
               </div>
@@ -321,7 +329,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E8%84%9A%E6%9C%AC/">#脚本</a>
+        <a href="/tags/maven/">#maven</a>
+      
+        <a href="/tags/nexus/">#nexus</a>
       
     </div>
   
@@ -335,18 +345,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/11/21/%E5%AF%BC%E5%87%BANexus%E4%B8%ADmaven%E4%BB%93%E5%BA%93%E7%9A%84jar%E5%8C%85/" title="导出Nexus中maven仓库的jar包">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">导出Nexus中maven仓库的jar包</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/06/20/windows%E4%BD%BF%E7%94%A8wrk%E5%AE%9E%E7%8E%B0%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/" title="windows使用wrk实现压力测试">
-                        <span class="hidden-mobile">windows使用wrk实现压力测试</span>
+                      <a href="/2023/10/12/%E4%BD%BF%E7%94%A8shell%E8%84%9A%E6%9C%AC%E5%8D%A0%E7%94%A8%E6%9C%8D%E5%8A%A1%E5%99%A8CPU/" title="使用shell脚本占用服务器CPU">
+                        <span class="hidden-mobile">使用shell脚本占用服务器CPU</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
